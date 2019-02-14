@@ -1,5 +1,5 @@
 package ule.edi.event;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -333,59 +333,133 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 	@Override
 	public List<Integer> getAvailableGoldSeatsList() {
 		// TODO Auto-generated method stub
-		return null;
+		List<Integer> AvailableGoldSeatsList = new ArrayList<Integer>();
+		
+		for(int i = 0; i < gold.length; i++) {
+			
+			if(gold[i] == null) {
+				
+			 AvailableGoldSeatsList.add(i);
+				
+			}
+			
+		}
+		return AvailableGoldSeatsList;
 	}
 
 
 	@Override
 	public List<Integer> getAvailableSilverSeatsList() {
 		// TODO Auto-generated method stub
-		return null;
+		List<Integer> AvailableSilverSeatsList = new ArrayList<Integer>();
+		
+		for(int i = 0; i < gold.length; i++) {
+			
+			if(gold[i] == null) {
+				
+			 AvailableSilverSeatsList.add(i);
+				
+			}
+			
+		}
+		
+		return AvailableSilverSeatsList;
 	}
 
 
 	@Override
 	public Double getPrice(Seat seat) {
 		// TODO Auto-generated method stub
-		return null;
+		double price = 0;
+		
+		if ((seat.getType() == Configuration.Type.GOLD) || (seat.getType() == Configuration.Type.SILVER)) {
+			if (seat.getType() == Configuration.Type.GOLD) {
+					price = getPriceGold();
+			}else {
+					price = getPriceSilver();
+			}
+		}
+		return price;
 	}
 
 
 	@Override
 	public Double getCollectionEvent() {
 		// TODO Auto-generated method stub
-		return null;
+		double collectionEvent = 0;
+		
+		collectionEvent = (getNumberOfSoldGoldSeats() * getPriceGold()) + (getNumberOfSoldSilverSeats() * getPriceSilver());
+		
+		return collectionEvent;
 	}
 
 
 	@Override
 	public int getPosPersonGold(Person p) {
 		// TODO Auto-generated method stub
-		return 0;
+		int posPersonGold = -1;
+		int i = 0;
+		while (p != null ) {
+			if(p == gold[i].getHolder()) {
+				
+				posPersonGold = gold[i].getPosition();
+			}
+			i++;
+		}
+		
+		return posPersonGold;
 	}
 
 
 	@Override
 	public int getPosPersonSilver(Person p) {
 		// TODO Auto-generated method stub
-		return 0;
+		int posPersonSilver = -1;
+		int i = 0;
+		while (p != null ) {
+			if(p == silver[i].getHolder()) {
+				
+				posPersonSilver = silver[i].getPosition();
+			}
+			i++;
+		}
+		
+		return posPersonSilver;
 	}
 
 
 	@Override
 	public boolean isGold(Person p) {
 		// TODO Auto-generated method stub
-		return false;
+		boolean isGold = false;
+		int i = 0;
+		while (p != null ) {
+			if(p == gold[i].getHolder()) {
+				
+				isGold = true;
+			}else 
+			i++;
+		}
+		
+		return isGold;
 	}
 
 
 	@Override
 	public boolean isSilver(Person p) {
 		// TODO Auto-generated method stub
-		return false;
+		boolean isSilver = false;
+		int i = 0;
+		while (p != null ) {
+			if(p == silver[i].getHolder()) {
+				
+				isSilver = true;
+			}else 
+			i++;
+		}
+		
+		return isSilver;
 	}
-
-	
 
 	
 }
