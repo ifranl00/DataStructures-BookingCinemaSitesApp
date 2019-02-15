@@ -97,14 +97,17 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		int NumberOfAttendingChildren = 0;
 		
 		for(int i = 0; i < gold.length; i++) {
-			if(gold[i].getHolder().getAge() < Configuration.CHILDREN_EXMAX_AGE) {
-				NumberOfAttendingChildrenGold++;
+			if(gold[i] != null) {
+				if(gold[i].getHolder().getAge() < Configuration.CHILDREN_EXMAX_AGE) {
+					NumberOfAttendingChildrenGold++;
+				}
 			}
-			
 		}
 		for(int j = 0; j < silver.length; j++) {
-			if(gold[j].getHolder().getAge() < Configuration.CHILDREN_EXMAX_AGE) {
-				NumberOfAttendingChildrenSilver++;
+			if(silver[j] != null) {
+				if(silver[j].getHolder().getAge() < Configuration.CHILDREN_EXMAX_AGE) {
+					NumberOfAttendingChildrenSilver++;
+				}
 			}
 		}
 		
@@ -120,14 +123,17 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		int NumberOfAttendingAdults = 0;
 		
 		for(int i = 0; i < gold.length; i++) {
-			if((gold[i].getHolder().getAge() >= Configuration.CHILDREN_EXMAX_AGE) &&(gold[i].getHolder().getAge() < Configuration.ELDERLY_PERSON_INMIN_AGE)) {
-				NumberOfAttendingAdultsGold++;
+			if(gold[i] != null) {
+					if((gold[i].getHolder().getAge() >= Configuration.CHILDREN_EXMAX_AGE) &&(gold[i].getHolder().getAge() < Configuration.ELDERLY_PERSON_INMIN_AGE)) {
+						NumberOfAttendingAdultsGold++;
+					}
 			}
-			
 		}
 		for(int j = 0; j < silver.length; j++) {
-			if((gold[j].getHolder().getAge() >= Configuration.CHILDREN_EXMAX_AGE) &&(gold[j].getHolder().getAge() < Configuration.ELDERLY_PERSON_INMIN_AGE)) {
-				NumberOfAttendingAdultsSilver++;
+			if(silver[j] != null) {
+				if((silver[j].getHolder().getAge() >= Configuration.CHILDREN_EXMAX_AGE) &&(silver[j].getHolder().getAge() < Configuration.ELDERLY_PERSON_INMIN_AGE)) {
+					NumberOfAttendingAdultsSilver++;
+				}
 			}
 		}
 		
@@ -144,14 +150,18 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		int NumberOfAttendingElderly = 0;
 		
 		for(int i = 0; i < gold.length; i++) {
-			if((gold[i].getHolder().getAge() > Configuration.ELDERLY_PERSON_INMIN_AGE) && (gold[i].getHolder().getAge() < Integer.MAX_VALUE)) {
-				NumberOfAttendingElderlyGold++;
+			if(gold[i] != null) {
+				if((gold[i].getHolder().getAge() > Configuration.ELDERLY_PERSON_INMIN_AGE) && (gold[i].getHolder().getAge() < Integer.MAX_VALUE)) {
+					NumberOfAttendingElderlyGold++;
+				}
 			}
 			
 		}
 		for(int j = 0; j < silver.length; j++) {
-			if((silver[j].getHolder().getAge() > Configuration.ELDERLY_PERSON_INMIN_AGE) && (silver[j].getHolder().getAge() < Integer.MAX_VALUE)) {
-				NumberOfAttendingElderlySilver++;
+			if(silver[j] != null) {
+				if((silver[j].getHolder().getAge() > Configuration.ELDERLY_PERSON_INMIN_AGE) && (silver[j].getHolder().getAge() < Integer.MAX_VALUE)) {
+					NumberOfAttendingElderlySilver++;
+				}
 			}
 		}
 		
@@ -188,7 +198,7 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		int NumberOfSoldSilverSeats = 0;
 		
 		for(int i = 0; i < silver.length; i++) {
-			if(gold[i] != null) {
+			if(silver[i] != null) {
 				
 				NumberOfSoldSilverSeats++;
 			}
@@ -251,19 +261,23 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		Seat s1 = null;
 		int i = 0;
 		
-		
-		while((pos > 0 ) && ((type == Configuration.Type.SILVER) || (type == Configuration.Type.GOLD) )) {
+	
+		while((pos > 0 ) && (pos < getNumberOfSeats())) {
 			if(type == Configuration.Type.SILVER) {
-				if(pos == silver[i].getPosition()) {
-					s1 = silver[i];
+				if(silver[i] != null) {
+					if(pos == silver[i].getPosition()) {
+						s1 = silver[i];
+					}
 				}
 
 			}else {
-				if(pos == gold[i].getPosition()) {
-					s1 = gold[i];
+				if(gold[i] != null) {
+					if(pos == gold[i].getPosition()) {
+						s1 = gold[i];
+					}
 				}
-			}
 			i++;
+			}
 		}
 		return s1;
 	}
@@ -275,20 +289,26 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		Person p1 = null;
 		int i = 0;
 		Seat s1 = getSeat(pos,type);
-		while((pos > 0 ) && ((type == Configuration.Type.SILVER) || (type == Configuration.Type.GOLD) )) {
-			if(type == Configuration.Type.SILVER) {
-				if(s1 == silver[i]) {
-					p1 = silver[i].getHolder();
-					silver[i] = null;
+		while((pos > 0 )) {
+			if((type == Configuration.Type.SILVER) && (pos < getNumberOfSilverSeats())) {
+				if(silver[i] != null) {
+					if(s1 == silver[i]) {
+						p1 = silver[i].getHolder();
+						silver[i] = null;
+					}
 				}
 
 			}else {
-				if(s1 == gold[i]) {
-					p1 = gold[i].getHolder();
-					gold[i] = null;
+				if(pos < getNumberOfGoldSeats()) {
+					if(gold[i] != null) {
+						if(s1 == gold[i]) {
+							p1 = gold[i].getHolder();
+							gold[i] = null;
+						}
+					}
 				}
+				i++;
 			}
-			i++;
 		}
 			
 		return p1;
@@ -300,12 +320,12 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		// TODO Auto-generated method stub
 		boolean isSeatSold = false;
 		
-		if(type == Configuration.Type.GOLD) {
+		if((type == Configuration.Type.GOLD) && (pos > 0 && pos < getNumberOfGoldSeats()) ) {
 			if(getNumberOfGoldSeats() > 0) {
 				for(int i = 0; i < gold.length; i++) {
-					if((pos == gold[i].getPosition()) && (gold[i] == null)) {
+						if((pos == gold[i].getPosition()) && (gold[i] == null)) {
 						
-						gold[i] = new Seat(null,pos,type, p);
+						gold[i] = new Seat(this,pos,type, p);
 						isSeatSold = true;
 						
 					}
@@ -314,7 +334,7 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 				
 			}
 		}else {
-			if(getNumberOfSilverSeats() > 0) {
+			if((getNumberOfSilverSeats() > 0 ) && (pos > 0 && pos < getNumberOfSilverSeats())) {
 				for(int j = 0; j < silver.length; j++) {
 					if((pos == silver[j].getPosition()) && (silver[j] == null)) {
 						
@@ -353,9 +373,9 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		// TODO Auto-generated method stub
 		List<Integer> AvailableSilverSeatsList = new ArrayList<Integer>();
 		
-		for(int i = 0; i < gold.length; i++) {
+		for(int i = 0; i < silver.length; i++) {
 			
-			if(gold[i] == null) {
+			if(silver[i] == null) {
 				
 			 AvailableSilverSeatsList.add(i);
 				
@@ -400,9 +420,11 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		int posPersonGold = -1;
 		int i = 0;
 		while (p != null ) {
-			if(p == gold[i].getHolder()) {
+			if(gold[i] != null) {
+				if(p == gold[i].getHolder()) {
 				
-				posPersonGold = gold[i].getPosition();
+					posPersonGold = gold[i].getPosition();
+				}
 			}
 			i++;
 		}
@@ -416,7 +438,7 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		// TODO Auto-generated method stub
 		int posPersonSilver = -1;
 		int i = 0;
-		while (p != null ) {
+		while (silver[i] != null) {
 			if(p == silver[i].getHolder()) {
 				
 				posPersonSilver = silver[i].getPosition();
@@ -433,7 +455,7 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		// TODO Auto-generated method stub
 		boolean isGold = false;
 		int i = 0;
-		while (p != null ) {
+		while (gold[i] != null ) {
 			if(p == gold[i].getHolder()) {
 				
 				isGold = true;
@@ -450,7 +472,7 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		// TODO Auto-generated method stub
 		boolean isSilver = false;
 		int i = 0;
-		while (p != null ) {
+		while (silver[i] != null) {
 			if(p == silver[i].getHolder()) {
 				
 				isSilver = true;
