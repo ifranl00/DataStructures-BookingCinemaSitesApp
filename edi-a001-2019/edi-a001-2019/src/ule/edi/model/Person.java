@@ -50,8 +50,24 @@ public class Person {
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
 		// Dos personas son iguales si son iguales sus nifs
+    	
+    	boolean isSamePerson = false;
+    	
+    	if(this == obj) { //Para saber si apuntan al mismo 
+    		
+    		isSamePerson = true;
+    	}
 		
-		return false;
+    	if(obj instanceof Person) { //Para saber si los objetos pertenecen a la misma clase
+    		
+    		Person other = (Person)obj; //Usamos un casting para poder acceder a los atributos del objeto
+    		
+    		if(this.nif.equals(other.nif)) {
+    			
+    			isSamePerson = true;
+    		}
+    	}
+		return isSamePerson;
 	}
 	
 }
