@@ -259,25 +259,19 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 	public Seat getSeat(int pos, Type type) {
 		// TODO Auto-generated method stub
 		Seat s1 = null;
-		int i = 0;
 		
-	
-		while((pos > 0 ) && (pos < getNumberOfSeats())) {
-			if(type == Configuration.Type.SILVER) {
-				if(silver[i] != null) {
-					if(pos == silver[i].getPosition()) {
-						s1 = silver[i];
-					}
-				}
+		if(pos > 0 ){
+			if((type == Configuration.Type.SILVER) && ((pos < getNumberOfSilverSeats()))) {
+				
+				s1 = silver[pos -1];
 
 			}else {
-				if(gold[i] != null) {
-					if(pos == gold[i].getPosition()) {
-						s1 = gold[i];
-					}
+				if((pos < getNumberOfGoldSeats())) {
+				s1 = gold[pos -1];	
+				
 				}
-			i++;
 			}
+			
 		}
 		return s1;
 	}
@@ -287,30 +281,22 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 	public Person refundSeat(int pos, Type type) {
 		// TODO Auto-generated method stub
 		Person p1 = null;
-		int i = 0;
-		Seat s1 = getSeat(pos,type);
-		while((pos > 0 )) {
-			if((type == Configuration.Type.SILVER) && (pos < getNumberOfSilverSeats())) {
-				if(silver[i] != null) {
-					if(s1 == silver[i]) {
-						p1 = silver[i].getHolder();
-						silver[i] = null;
-					}
+		
+		if(pos > 0) {
+			if((type == Configuration.Type.SILVER) && (pos < getNumberOfSilverSeats()) && (silver[pos-1] != null)) {
+				
+						p1 = silver[pos -1].getHolder();
+						silver[pos -1] = null;
+				
+			}else {
+				if(pos < getNumberOfGoldSeats() && gold[pos-1] != null) {
+					
+						p1 = gold[pos -1].getHolder();
+						gold[pos -1] = null;
 				}
 
-			}else {
-				if(pos < getNumberOfGoldSeats()) {
-					if(gold[i] != null) {
-						if(s1 == gold[i]) {
-							p1 = gold[i].getHolder();
-							gold[i] = null;
-						}
-					}
-				}
-				i++;
 			}
 		}
-			
 		return p1;
 	}
 
@@ -320,32 +306,21 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		// TODO Auto-generated method stub
 		boolean isSeatSold = false;
 		
-		if((type == Configuration.Type.GOLD) && (pos > 0 && pos < getNumberOfGoldSeats()) ) {
-			if(getNumberOfGoldSeats() > 0) {
-				for(int i = 0; i < gold.length; i++) {
-						if((pos == gold[i].getPosition()) && (gold[i] == null)) {
+		if(getNumberOfAvailableSeats() > 0) {
+			if((type == Configuration.Type.GOLD) && (pos > 0 && pos < getNumberOfGoldSeats()) && (getNumberOfGoldSeats() > 0) && (gold[pos-1] == null))  {
+			
+				gold[pos -1] = new Seat(this,pos,type, p);
+				isSeatSold = true;
 						
-						gold[i] = new Seat(this,pos,type, p);
-						isSeatSold = true;
-						
-					}
-					
-				}
-				
-			}
-		}else {
-			if((getNumberOfSilverSeats() > 0 ) && (pos > 0 && pos < getNumberOfSilverSeats())) {
-				for(int j = 0; j < silver.length; j++) {
-					if((pos == silver[j].getPosition()) && (silver[j] == null)) {
-						
-						silver[j] = new Seat(null,pos,type,p);
-						isSeatSold = true;
-					}
-					
+			}else {
+				if( (pos > 0 && pos < getNumberOfSilverSeats()) &&(getNumberOfSilverSeats() > 0 ) && (silver[pos -1] == null)) {
+
+				silver[pos -1] = new Seat(this,pos,type,p);
+				isSeatSold = true;
+
 				}
 			}
 		}
-		
 		return isSeatSold;
 	}
 
@@ -359,7 +334,7 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 			
 			if(gold[i] == null) {
 				
-			 AvailableGoldSeatsList.add(i);
+			 AvailableGoldSeatsList.add(i+1);
 				
 			}
 			
@@ -377,7 +352,7 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 			
 			if(silver[i] == null) {
 				
-			 AvailableSilverSeatsList.add(i);
+			 AvailableSilverSeatsList.add(i+1);
 				
 			}
 			
@@ -392,13 +367,12 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		// TODO Auto-generated method stub
 		double price = 0;
 		
-		if ((seat.getType() == Configuration.Type.GOLD) || (seat.getType() == Configuration.Type.SILVER)) {
+		
 			if (seat.getType() == Configuration.Type.GOLD) {
 					price = getPriceGold();
 			}else {
 					price = getPriceSilver();
 			}
-		}
 		return price;
 	}
 
@@ -419,13 +393,13 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		// TODO Auto-generated method stub
 		int posPersonGold = -1;
 		int i = 0;
-		while (p != null ) {
-			if(gold[i] != null) {
+		while (gold[i] != null){
+			
 				if(p == gold[i].getHolder()) {
 				
 					posPersonGold = gold[i].getPosition();
 				}
-			}
+			
 			i++;
 		}
 		
@@ -454,15 +428,16 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 	public boolean isGold(Person p) {
 		// TODO Auto-generated method stub
 		boolean isGold = false;
-		int i = 0;
-		while (gold[i] != null ) {
-			if(p == gold[i].getHolder()) {
-				
-				isGold = true;
-			}else 
-			i++;
-		}
 		
+		for(int i = 0; i < gold.length; i++) {
+			if(gold[i] != null ) {
+				if(p == gold[i].getHolder()) {
+				
+					isGold = true;
+				}
+			}
+		
+		}
 		return isGold;
 	}
 
@@ -471,17 +446,19 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 	public boolean isSilver(Person p) {
 		// TODO Auto-generated method stub
 		boolean isSilver = false;
-		int i = 0;
-		while (silver[i] != null) {
-			if(p == silver[i].getHolder()) {
-				
-				isSilver = true;
-			}else 
-			i++;
-		}
 		
-		return isSilver;
+		for(int i = 0; i < silver.length; i++) {
+			if(silver[i] != null ) {
+				if(p == silver[i].getHolder()) {
+				
+					isSilver = true;
+				}
+			}
+		
+		}
+		return isSilver; 
 	}
+}
 
 	
-}
+
