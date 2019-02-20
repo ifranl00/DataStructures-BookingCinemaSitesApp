@@ -261,12 +261,12 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		Seat s1 = null;
 		
 		if(pos > 0 ){
-			if((type == Configuration.Type.SILVER) && ((pos < getNumberOfSilverSeats()))) {
+			if((type == Configuration.Type.SILVER) && ((pos <= getNumberOfSilverSeats()))) {
 				
 				s1 = silver[pos -1];
 
 			}else {
-				if((pos < getNumberOfGoldSeats())) {
+				if((pos <= getNumberOfGoldSeats())) {
 				s1 = gold[pos -1];	
 				
 				}
@@ -307,13 +307,13 @@ public EventArrayImpl(String name, Date date, int nGold, int nSilver){
 		boolean isSeatSold = false;
 		
 		if(getNumberOfAvailableSeats() > 0) {
-			if((type == Configuration.Type.GOLD) && (pos > 0 && pos < getNumberOfGoldSeats()) && (getNumberOfGoldSeats() > 0) && (gold[pos-1] == null))  {
+			if((type == Configuration.Type.GOLD) && (pos > 0 && pos <= getNumberOfGoldSeats()) &&  (gold[pos-1] == null))  {
 			
 				gold[pos -1] = new Seat(this,pos,type, p);
 				isSeatSold = true;
 						
 			}else {
-				if( (pos > 0 && pos < getNumberOfSilverSeats()) &&(getNumberOfSilverSeats() > 0 ) && (silver[pos -1] == null)) {
+				if( (pos > 0 && pos < getNumberOfSilverSeats()) && (silver[pos -1] == null)) {
 
 				silver[pos -1] = new Seat(this,pos,type,p);
 				isSeatSold = true;

@@ -35,6 +35,7 @@ public class EventArrayImplTests {
 		
 	    Assert.assertTrue(e.getNumberOfAvailableSeats()==110);
 	    Assert.assertEquals(e.getNumberOfSilverSeats(), 100);
+	    Assert.assertEquals(e.getNumberOfGoldSeats(),10);
 	    Assert.assertEquals(e.getNumberOfAttendingAdults(), 0);
 	}
 	
@@ -402,6 +403,10 @@ public class EventArrayImplTests {
 		Assert.assertTrue(e.sellSeat(2,p2,Type.GOLD));
 		Assert.assertTrue(e.sellSeat(3,p3,Type.SILVER));
 		
+		Assert.assertNotNull(e.getSeat(1,Type.SILVER ));
+		Assert.assertNotNull(e.getSeat(2,Type.GOLD ));
+		Assert.assertNotNull(e.getSeat(3, Type.SILVER));
+		
 	}
 	
 	@Test
@@ -437,12 +442,22 @@ public class EventArrayImplTests {
 		
 		Person p1 = new Person("Sonyeon","10203040A", 13);
 		Person p2 = new Person("Sehun","10203040B", 21);
+		Person p3 = new Person("Chanyeol","10203040C", 13);
+		Person p4 = new Person("Chen","10203040D", 21);
 		
 		e.sellSeat(1, p1, Type.SILVER);
 		e.sellSeat(1, p2, Type.GOLD);
 		
-		Assert.assertFalse(e.sellSeat(1,p1,Type.SILVER));
-		Assert.assertFalse(e.sellSeat(1,p2,Type.GOLD));
+		
+		Assert.assertNotNull(e.getSeat(1,Type.SILVER ));
+		Assert.assertNotNull(e.getSeat(1,Type.GOLD ));
+		
+		
+		e.sellSeat(1, p3, Type.SILVER);
+		e.sellSeat(1, p4, Type.GOLD);
+		
+		Assert.assertFalse(e.sellSeat(1,p3,Type.SILVER));
+		Assert.assertFalse(e.sellSeat(1,p4,Type.GOLD));
 		
 	}
 	
